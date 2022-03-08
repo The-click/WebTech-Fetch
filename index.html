@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Noto+Serif+Display:wght@400;600&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="wrap">
+        <header class="header">
+            <div class="container">
+                <div class="header__inner">
+                    <div class="header__logo">
+                        <a href="https://fetch.spec.whatwg.org/" class="intro__link"><img src="./images/fetch.jpg" alt="logo"></a>
+                    </div>
+                    <div class="burger">
+                        <span></span>
+                    </div>
+                    <nav class="nav header__nav">
+                        <ul>
+                            <li class="header__item"><a href="#intro" class="header__links">Введние</a></li>
+                            <li class="header__item"><a href="#using" class="header__links">Использование</a></li>
+                            <li class="header__item"><a href="#headers" class="header__links">Заголовоки</a></li>
+                            <li class="header__item"><a href="#request" class="header__links">POST-запросы</a></li>
+                            <li class="header__item"><a href="#conclusion" class="header__links">Заключение</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main class="main">
+            <button class="btnUp">
+                &and;
+            </button>
+            <section class="intro" id="intro">
+                <div class="container">
+                    <div class="intro__inner inner">
+                        <h1 class="intro__title"> <a href="https://fetch.spec.whatwg.org/" class="intro__link">Fetch</a></h1>
+                        <p class="text intro__about">Fetch API предоставляет интерфейс JavaScript для работы с запросами и ответами HTTP</p>
+                        <div class="intro__examples text">
+                            <p>Например, мы можем использовать сетевой запрос, чтобы:</p>
+                            <ul>
+                                <li class="text__item">Отправить заказ,</li>
+                                <li class="text__item">Загрузить информацию о пользователе,</li>
+                                <li class="text__item">Запросить последние обновления с сервера,</li>
+                                <li class="text__item">…и т.п.</li>
+                            </ul>
+                        </div>
+                        <p class="text intro__descript">
+                            Метод fetch() — современный и очень мощный инструмент для сетевых запросов из JavaScript. Он не поддерживается старыми (можно использовать полифил), но поддерживается всеми современными браузерами.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section class="using" id="using">
+                <div class="container">
+                    <div class="using__inner inner">
+                        <h2 class="title using__title">Использование</h2>
+                        <p class="text using__text">Базовый синтаксис:</p>  
+                        <pre class="code using__code">let promise = fetch(url, [options])</pre>
+                        <ul class="text__list using__ul">
+                            <li class="text__item"> <span class="text__code">url</span> – URL для отправки запроса.</li>
+                            <li class="text__item"> <span class="text__code">options</span> – дополнительные параметры: метод, заголовки и так далее.</li>
+                        </ul>
+
+                        <p class="text text__using">
+                            Без <span class="text__code">options</span> это простой GET-запрос, скачивающий содержимое по адресу url.
+                        </p>
+                        <p class="text text__using">
+                            Браузер сразу же начинает запрос и возвращает промис, который внешний код использует для получения результата.
+                        </p>
+                        <p class="text text__using">
+                            Процесс получения ответа обычно происходит в два этапа.
+                        </p>
+                        <p class="text text__using text__bold">
+                            Во-первых, <span class="text__code">promise</span> выполняется с объектом встроенного класса <a href="https://fetch.spec.whatwg.org/#response-class" class="text__link">Response</a> в качестве результата, как только сервер пришлёт заголовки ответа.
+                        </p>
+                        <p class="text text__using">
+                            На этом этапе мы можем проверить статус HTTP-запроса и определить, выполнился ли он успешно, а также посмотреть заголовки, но пока без тела ответа.
+                        </p>
+                        <p class="text text__using">
+                            Промис завершается с ошибкой, если <span class="text__code">fetch</span> не смог выполнить HTTP-запрос, например при ошибке сети или если нет такого сайта. HTTP-статусы 404 и 500 не являются ошибкой.
+                        </p>
+                        <p class="text text__using">
+                            Мы можем увидеть HTTP-статус в свойствах ответа:
+                        </p>
+                        <ul class="text__list ">
+                            <li class="text__item">
+                                <span class="text__code">status</span> – код статуса HTTP-запроса, например 200.
+                            </li>
+                            <li class="text__item">
+                                <span class="text__code">ok</span> – логическое значение: будет <span class="text__code">true</span>, если код HTTP-статуса в диапазоне 200-299.
+                            </li>
+                        </ul>
+                        <p class="text text__using">
+                            Например:
+                        </p>
+                         
+<pre class="code code__using">
+let response = await fetch(url);
+                        
+if (response.ok) { // если HTTP-статус в диапазоне 200-299 
+  // получаем тело ответа (см. про этот метод ниже) 
+  let json = await response.json(); 
+} else { 
+  alert("Ошибка HTTP: " + response.status); 
+}
+</pre>
+                        <p class="text text__using text__bold">
+                            Во-вторых, для получения тела ответа нам нужно использовать дополнительный вызов метода.
+                        </p>
+                        <p class="text text__using">
+                            <span class="text__code">Response</span> предоставляет несколько методов, основанных на промисах, для доступа к телу ответа в различных форматах:
+                        </p>
+                        <ul class="text__list">
+                            <li class="text__item"><span class="text__code">response.text()</span> – читает ответ и возвращает как обычный текст,</li>
+                            <li class="text__item"><span class="text__code">response.json()</span> – декодирует ответ в формате JSON,</li>
+                            <li class="text__item"><span class="text__code">response.formData()</span> – возвращает ответ как объект <span class="text__code text__code_unbold">FormData</span></li>
+                            <li class="text__item"><span class="text__code">response.blob()</span> – возвращает объект как <span class="text__code text__code_unbold">Blob</span>,</li>
+                            <li class="text__item"><span class="text__code">response.arrayBuffer()</span> – возвращает ответ как <span class="text__code text__code_unbold">ArrayBuffer</span>,</li>
+                            <li class="text__item">помимо этого, <span class="text__code text__code_unbold">response.body</span> – это объект ReadableStream, с помощью которого можно считывать тело запроса по частям. Мы рассмотрим и такой пример несколько позже.</li>
+                        </ul>
+                        <p class="text text__using">
+                            Например, получим JSON-объект с последними коммитами из репозитория на GitHub:
+                        </p>
+<pre class="code code__using">
+let url = 'https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits';
+let response = await fetch(url);
+
+let commits = await response.json(); // читаем ответ в формате JSON
+</pre>
+                        <p class="text text__using">
+                            То же самое без <span class="text__code">await</span>, с использованием промисов:
+                        </p>
+<pre class="code code__using">
+fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits')
+    .then(response => response.json())
+</pre>
+                        <p class="text text__using">
+                            Для получения ответа в виде текста используем <span class="text__code">await response.text()</span> вместо <span class="text__code">.json()</span>:
+                        </p>
+ <pre class="code code__using">
+let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+let text = await response.text(); // прочитать тело ответа как текст                                                    
+</pre>
+                    </div>
+                </div>
+            </section>
+            <section class="headers" id="headers">
+                <div class="container">
+                    <div class="headers__inner inner">
+                        <h2 class="title headers__title">Заголовки</h2>
+                        <h3 class="headers__subtitle">
+                            Заголовки ответа
+                        </h3>
+
+                        <p class="text text__headers">
+                        Заголовки ответа хранятся в похожем на <span class="text__code">Map</span> объекте <span class="text__code">response.headers</span>.
+                        </p>
+                        <p class="text text__headers">
+                            Это не совсем <span class="text__code">Map</span>, но мы можем использовать такие же методы, как с <span class="text__code">Map</span>, чтобы получить заголовок по его имени или перебрать заголовки в цикле:
+                        </p>
+<pre class="code code__using">
+let response = await fetch('https://api.github.com/repos/javascript-tutorial/en.javascript.info/commits');
+
+// получить один заголовок
+alert(response.headers.get('Content-Type')); // application/json; charset=utf-8
+
+// перебрать все заголовки
+for (let [key, value] of response.headers) {
+  alert(`${key} = ${value}`);
+}
+</pre>
+
+
+
+                        <h3 class="headers__subtitle">
+                            Заголовки запроса
+                        </h3>
+                        <p class="text text__headers">
+                            Для установки заголовка запроса в <span class="text__code">fetch</span> мы можем использовать опцию <span class="text__code">headers</span>. Она содержит объект с исходящими заголовками, например:
+                        </p>
+<pre class="code code__using">
+let response = fetch(protectedUrl, {
+    headers: {
+      Authentication: 'secret'
+    }
+  });
+</pre>
+                    <p class="text text__headers">
+                        Есть список <a href="https://fetch.spec.whatwg.org/#forbidden-header-name" class="text__links">запрещённых HTTP-заголовков</a>, которые мы не можем установить:
+                    </p>
+                    <ul class="text__list">
+                        <li class="text__item"><span class="text__code">Accept-Charset, Accept-Encoding</span></li>
+                        <li class="text__item"><span class="text__code">Access-Control-Request-Headers</span></li>
+                        <li class="text__item"><span class="text__code">Access-Control-Request-Method</span></li>
+                        <li class="text__item"><span class="text__code">Connection</span></li>
+                        <li class="text__item"><span class="text__code">Content-Length</span></li>
+                        <li class="text__item"><span class="text__code">Cookie, Cookie2</span></li>
+                        <li class="text__item"><span class="text__code">Date</span></li>
+                        <li class="text__item"><span class="text__code">DNT</span></li>
+                        <li class="text__item"><span class="text__code">Expect</span></li>
+                        <li class="text__item"><span class="text__code">Host</span></li>
+                        <li class="text__item"><span class="text__code">Keep-Alive</span></li>
+                        <li class="text__item"><span class="text__code">Origin</span></li>
+                        <li class="text__item"><span class="text__code">Referer</span></li>
+                        <li class="text__item"><span class="text__code">TE</span></li>
+                        <li class="text__item"><span class="text__code">Trailer</span></li>
+                        <li class="text__item"><span class="text__code">Transfer-Encoding</span></li>
+                        <li class="text__item"><span class="text__code">Upgrade</span></li>
+                        <li class="text__item"><span class="text__code">Via</span></li>
+                        <li class="text__item"><span class="text__code">Proxy-*</span></li>
+                        <li class="text__item"><span class="text__code">Sec-*</span></li>
+                    </ul>
+                    <p class="text text__headers">
+                        Эти заголовки обеспечивают достоверность данных и корректную работу протокола HTTP, поэтому они контролируются исключительно браузером.
+                    </p>
+
+
+
+                    </div>  
+                </div>
+
+            </section>
+
+            <section class="request" id="request">
+                <div class="container">
+                    <div class="request__inner inner">
+                        <h2 class="request__title title">POST-запросы</h2>
+                        <p class="request__text text">Для отправки POST-запроса или запроса с другим методом, нам необходимо использовать fetch параметры:</p>
+                        <ul class="request__ul text__list">
+                            <li class="text__item"><span class="text__code">method</span> – HTTP метод, например <span class="text__code">POST</span>,</li>
+                            <li class="text__item"><span class="text__code">body</span> – тело запроса, одно из списка:
+                                <ul class="request__ul text__list">
+                                    <li class="text__item">строка (например, в формате JSON),</li>
+                                    <li class="text__item">объект <span class="text__code">FormData</span> для отправки данных как <span class="text__code">form/multipart</span>, </li>
+                                    <li class="text__item"><span class="text__code">Blob/BufferSource</span> для отправки бинарных данных, </li>
+                                    <li class="text__item"> <span class="text__code">URLSearchParams</span> для отправки данных в кодировке <span class="text__code">x-www-form-urlencoded</span>, используется редко. </li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                        <p class="request__text text">
+                            Чаще всего используется JSON.
+                        </p>
+                        <p class="request__text text">
+                            Например, этот код отправляет объект <span class="text__code">user</span> как JSON:
+                        </p>
+
+<pre class="code code__request">
+let user = {
+  name: 'John',
+  surname: 'Smith'
+};
+
+let response = await fetch('/article/fetch/post/user', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8'
+  },
+  body: JSON.stringify(user)
+});
+
+let result = await response.json();
+alert(result.message);
+</pre>
+
+                        <p class="request__text text">Заметим, что так как тело запроса <span class="text__code">body</span> – строка, то заголовок <span class="text__code">Content-Type</span> по умолчанию будет <span class="text__code">text/plain;charset=UTF-8</span>.</p>
+                        <p class="request__text text">Но, так как мы посылаем JSON, то используем параметр <span class="text__code">headers</span> для отправки вместо этого <span class="text__code">application/json</span>, правильный <span class="text__code">Content-Type</span> для JSON.</p>
+                        </span>
+
+
+                    </div>
+                </div>
+            </section>
+            <section class="conclusion" id="conclusion">
+                <div class="container">
+                    <div class="conclusion__inner inner">
+                        <h2 class="conclusion__title title">Заключение</h2>
+
+                        <p class="text">
+                            Типичный запрос с помощью fetch состоит из двух операторов await:
+                        </p>
+
+<pre class="code code__conclusion">
+let response = await fetch(url, options); // завершается с заголовками ответа
+let result = await response.json(); // читать тело ответа в формате JSON
+</pre>
+                        <p class="text conclusion__text">
+                            Или, без await:
+                        </p>
+<pre class="code code__conclusion">
+fetch(url, options)
+    .then(response => response.json())
+    .then(result => /* обрабатываем результат */)
+</pre>
+                        
+
+                        <ul class="text__list conclusion__ul">
+                            <p class="text conclusion__text">
+                                Параметры ответа:
+                            </p>
+                            <li class="text__item"><span class="text__code">response.status</span> – HTTP-код ответа,</li>
+                            <li class="text__item"><span class="text__code">response.ok</span> – <span class="text__code">true</span>, если статус ответа в диапазоне 200-299.</li>
+                            <li class="text__item"><span class="text__code">response.headers</span>– похожий на <span class="text__code">Map</span> объект с HTTP-заголовками.</li>
+                        </ul>
+
+                        
+  
+                        <ul class="text__list conclusion__ul">
+                            <p class="text conclusion__text">
+                                Методы для получения тела ответа:
+                            </p>
+                            <li class="text__item"><span class="text__code">response.text()</span> – возвращает ответ как обычный текст,</li>
+                            <li class="text__item"><span class="text__code">response.json()</span> – преобразовывает ответ в JSON-объект,</li>
+                            <li class="text__item"><span class="text__code">response.formData()</span> – возвращает ответ как объект <span class="text__code">FormData</span> (кодировка form/multipart),</li>
+                            <li class="text__item"><span class="text__code">response.blob()</span> – возвращает объект как <span class="text__code">Blob</span> (бинарные данные с типом),</li>
+                            <li class="text__item"><span class="text__code">response.arrayBuffer()</span> – возвращает ответ как <span class="text__code">ArrayBuffer</span> (низкоуровневые бинарные данные),</li>
+                        </ul>
+
+                        
+                        <ul class="text__list conclusion__ul">
+                            <p class="text conclusion__text">
+                                Опции fetch, которые были рассмотрены:
+                            </p>
+                            <li class="text__item"><span class="text__code">method</span> – HTTP-метод, </li>
+                            <li class="text__item"><span class="text__code">headers</span> – объект с запрашиваемыми заголовками (не все заголовки разрешены), </li>
+                            <li class="text__item"><span class="text__code">body</span> – данные для отправки (тело запроса) в виде текста, <span class="text__code">FormData</span>, <span class="text__code">BufferSource</span>, <span class="text__code">Blob</span> или <span class="text__code">UrlSearchParams</span>. </li>
+                        </ul>
+                       
+                        
+                        
+
+
+
+
+                    </div>
+                </div>
+            </section>
+            
+
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <div class="footer__inner ">
+                    <img src="./images/fetch.jpg" alt="logo">
+                </div>
+            </div>
+
+        </footer>
+    </div>
+
+
+    <script src="./script.js"></script>
+</body>
+</html>
